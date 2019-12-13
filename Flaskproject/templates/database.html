@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>History</title>
+    <h1>History</h1>
+</head>
+<body>
+      <table border = 10>
+         <thead>
+            <td>Date</td>
+            <td>Temperature</td>
+
+         </thead>
+
+         {% for row in rows %}
+            <tr>
+               <td>{{row["Date"]}}</td>
+               <td>{{row["CityANDTemp"]}}</td>
+
+            </tr>
+         {% endfor %}
+      </table>
+      <br>
+      <a href ="/"><button>Previous page</button></a>
+
+</body>
+</html>
