@@ -18,8 +18,9 @@ with open('weather.txt', 'r', encoding='utf-8') as f:
 
 soup = BeautifulSoup(html, 'lxml')
 
-# parsing today's forecast
-today = []
+today = [] # parsing today's forecast
+tomorrow = [] # parsing tomorrow's forecast
+aftertomorrow = [] # parsing aftertomorrow's forecast
 for row in soup.select('tbody > tr'):
     temp = row.select('td')
     city = row.select('th')
@@ -27,38 +28,25 @@ for row in soup.select('tbody > tr'):
         city[0].text + ": Max " + temp[1].text + " °C, " + "Min " + temp[2].text + " °C"
     )
 
-# for elem in today:
-#     print(elem)
-# print(today[0])
-
-
-# parsing tomorrow's forecast
-tomorrow = []
-for row in soup.select('tbody > tr'):
-    temp = row.select('td')
-    city = row.select('th')
     tomorrow.append(
         city[0].text + ": Max " + temp[4].text + " °C, " + "Min " + temp[5].text + " °C"
     )
+
+    aftertomorrow.append(
+        city[0].text + ": Max " + temp[7].text + " °C, " + "Min " + temp[8].text + " °C"
+    )
+
+# for elem in today:
+#     print(elem)
+# print(today[0])
 
 # for elem in tomorrow:
 #     print(elem)
 # print(tomorrow[0])
 
-
-# parsing aftertomorrow's forecast
-aftertomorrow = []
-for row in soup.select('tbody > tr'):
-    temp = row.select('td')
-    city = row.select('th')
-    aftertomorrow.append(
-        city[0].text + ": Max " + temp[7].text + " °C, " + "Min " + temp[8].text + " °C"
-    )
-
 # for elem in aftertomorrow:
 #     print(elem)
 # print(aftertomorrow[0])
-
 
 today1 = []  # parsing today's date
 tomorrow1 = []  # parsing tomorrow's date
@@ -80,7 +68,6 @@ for row in soup.select('thead > tr'):
 # print(today1[0])
 # print(tomorrow1[0])
 # print(aftertomorrow1[0])
-
 
 def cur_execute(data, *args):
     con = sqlite3.connect('weather.db')
@@ -104,42 +91,20 @@ while True:
     print('type the name of the city')
     city = str(input())
 
+    the_day = {
+        '1': (today, today1),
+        '2': (tomorrow, tomorrow1),
+        '3': (aftertomorrow, aftertomorrow1)}
 
-    if day == '1':
-        pass
-        for elem in today:
-            if city.lower() in elem or city.upper() in elem:
-                print(today1[0])
-                print(elem)
-                cur_execute("INSERT INTO data VALUES(?, ?)", today1[0], elem)
-                break
-
-        else:
-            print('data was not found')
-
-    if day == '2':
-        pass
-        for elem in tomorrow:
-            if city.lower() in elem or city.upper() in elem:
-                print(tomorrow1[0])
-                print(elem)
-                cur_execute("INSERT INTO data VALUES(?, ?)", tomorrow1[0], elem)
-                break
-
-        else:
-            print('data was not found')
-
-    if day == '3':
-        pass
-        for elem in aftertomorrow:
-            if city.lower() in elem or city.upper() in elem:
-                print(aftertomorrow1[0])
-                print(elem)
-                cur_execute("INSERT INTO data VALUES(?, ?)", aftertomorrow1[0], elem)
-                break
-
-        else:
-            print('data was not found')
+    selected_day, selected_day1 = the_day[day]
+    for elem in selected_day:
+        if city.lower() in elem or city.upper() in elem:
+            print(selected_day1[0])
+            print(elem)
+            cur_execute("INSERT INTO data VALUES(?, ?)", selected_day1[0], elem)
+            break
+    else:
+        print('data was not found')
 
     print('to display history press "d" OR "c" to continue OR "e" to exit')
     option= str(input())
@@ -153,6 +118,7 @@ while True:
                 Date, CityANDTemp = row
                 print(Date, end=', ')
                 print(CityANDTemp)
+
 
         with sqlite3.connect('weather.db') as conn:
             read_lines(conn)
