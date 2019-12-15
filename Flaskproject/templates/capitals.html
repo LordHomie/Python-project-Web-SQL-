@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First Flask App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<script>
+function myFunction() {
+var city= $('#city').val();
+var limit= $('#limit').val();
+  $.ajax({
+              url: "/joinFUNC2",
+              type: "POST",
+              data: {city:city,
+              limit:limit}
+          }).done(function(response) {
+            var html= "<p> <b> ------------------------------------------------- <b><p>";
+            response =response.result;
+                 $.each(response,function(key,val){
+                 console.log(val);
+                    html+="<p>"+val+"<p>"
+                });
+<!--                html +="<br>";-->
+                $(".show-data").append(html);
+            });
+};
+  </script>
+<body>
+<h1>Long-Term Forecast for popular capitals around the world</h1>
+    <p>
+            <label>Select city</label> <input type="text" id="city" name="city" list="cities" >
+            <datalist id="cities">
+            <option value="Moscow">
+            <option value="Ottawa">
+            <option value="Washington">
+            <option value="London">
+            <option value="Kiev">
+            <option value="Abu dhabi">
+            <option value="Cairo">
+            <option value="Damascus">
+            <option value="Berlin">
+            <option value="Rome">
+            <option value="Budapest">
+            <option value="Baku">
+            <option value="Yerevan">
+            <option value="Vienna">
+            <option value="Buenos Aires">
+            <option value="Brussels">
+            <option value="Beijing">
+            <option value="Lisbon">
+            <option value="Sydney">
+            <option value="Riyadh">
+            <option value="Ankara">
+            <option value="Tirane">
+            <option value="Minsk">
+            <option value="Helsinki">
+            <option value="Athens">
+            <option value="Dublin">
+            <option value="Beirut">
+            <option value="Monaco">
+            <option value="Islamabad">
+            <option value="Seoul">
+            </datalist>
+
+
+            <label>Select period</label> <input type="text" id="limit" name="limit" list="period">
+            <datalist id="period">
+            <option value="4 days">
+            <option value="a week">
+            <option value="10 days">
+            <option value="2 weeks">
+            </datalist>
+
+            <button id="clicked" onclick="myFunction()">Click me!</button>
+            <a href ="/"><button>main page</button></a> <br>
+            <p>it might take some time. please, have some patience;)</p>
+
+
+
+    <div class="show-data" >
+    </div>
+
+<p><img src="https://cdn0.iconfinder.com/data/icons/weather-1-7/512/Sun_Rain_And_Snow-512.png" alt="A Great HTML Resource"></p>
+<hr>
+<p>info is provided by <a href="https://www.worldweatheronline.com/" target="_blank">worldweatheronline</a>.
+<p>a link to my <a href="https://github.com/LordHomie" target="_blank">github page</a></p>
+<!-- And add a copyright notice.-->
+<p>&#169; Homie Publishing, 2019</p>
+</body>
+</html>
