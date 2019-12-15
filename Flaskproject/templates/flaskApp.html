@@ -10,7 +10,7 @@ function myFunction() {
 var day= $('#day').val();
 var city= $('#city').val();
   $.ajax({
-              url: "/join",
+              url: "/joinFUNC",
               type: "POST",
               data: {day:day,
               city:city}
@@ -125,15 +125,15 @@ var city= $('#city').val();
             <button id="clicked" onclick="myFunction()">Click me!</button>
 
             <a href="database"><button>History</button></a>
+            <br><br>
+            <p>Would you like to get a long-term forecast? <a href="capitals"><button>Let's GO</button></a> </p>
 
 
 
-
-        </p>
     <div class="show-data" >
     </div>
+
 <p><img src="https://cdn0.iconfinder.com/data/icons/thiin-weather-cloud-effects/512/DROOLING_RAIN-512.png" alt="A Great HTML Resource"></p>
-</p>
 <hr>
 <p>info is provided by <a href="https://mgm.gov.tr/eng/forecast-some-world-cities.aspx" target="_blank">mgm.gov.tr</a>.
 <p>a link to my<a href="https://github.com/LordHomie" target="_blank">github page</a></p>
