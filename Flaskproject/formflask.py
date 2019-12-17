@@ -7,16 +7,27 @@ from flask import Flask, request, render_template,jsonify
 app = Flask(__name__, template_folder='templates')
 
 
-def cur_execute(data, *args):
+def cur_execute1(data, *args):
     con = sqlite3.connect('weather.db')
     with con:
         cur = con.cursor()
         cur.execute(data, args)
         con.commit()
 
+cur_execute1('DROP TABLE IF EXISTS data')
+cur_execute1("CREATE TABLE data(Date TEXT, CityANDTemp TEXT)")
 
-cur_execute('DROP TABLE IF EXISTS data')
-cur_execute("CREATE TABLE data(Date TEXT, CityANDTemp TEXT)")
+
+def cur_execute2(data, *args):
+    con = sqlite3.connect('capitals.db')
+    with con:
+        cur = con.cursor()
+        cur.execute(data, args)
+        con.commit()
+
+cur_execute2('DROP TABLE IF EXISTS data')
+cur_execute2("CREATE TABLE data(City TEXT, period TEXT, Days TEXT)")
+
 def do_something(day, city):
     if os.path.isfile('weather.txt'):
         os.remove('weather.txt')
@@ -96,7 +107,7 @@ def do_something(day, city):
     for elem in selected_temp:
         if city.lower() in elem or city.upper() in elem:
             combine = selected_date[0] + ",  " + elem
-            cur_execute("INSERT INTO data VALUES(?, ?)", selected_date[0], elem)
+            cur_execute1("INSERT INTO data VALUES(?, ?)", selected_date[0], elem)
             return combine
     else:
         combine = 'data was not found'
@@ -107,36 +118,36 @@ def capitals(city, limit):
     if os.path.isfile('capitals.txt'):
         os.remove('capitals.txt')
 
-    MOSCOW = urllib.request.urlopen('https://www.worldweatheronline.com/moscow-weather/moscow-city/ru.aspx')
-    OTTAWA = urllib.request.urlopen('https://www.worldweatheronline.com/ottawa-weather/ontario/ca.aspx')
-    WASHIGNTON = urllib.request.urlopen('https://www.worldweatheronline.com/washington-weather/district-of-columbia/us.aspx')
-    LONDON = urllib.request.urlopen('https://www.worldweatheronline.com/london-weather/city-of-london-greater-london/gb.aspx')
-    KIEV = urllib.request.urlopen('https://www.worldweatheronline.com/kiev-weather/kyyivska-oblast/ua.aspx')
-    ABUDHABI = urllib.request.urlopen('https://www.worldweatheronline.com/abu-dhabi-weather/abu-dhabi/ae.aspx')
-    CAIRO = urllib.request.urlopen('https://www.worldweatheronline.com/cairo-weather/al-qahirah/eg.aspx')
-    DAMASCUS = urllib.request.urlopen('https://www.worldweatheronline.com/damascus-weather/dimashq/sy.aspx')
-    BERLIN = urllib.request.urlopen('https://www.worldweatheronline.com/berlin-weather/berlin/de.aspx')
-    ROME = urllib.request.urlopen('https://www.worldweatheronline.com/rome-weather/lazio/it.aspx')
-    BUDAPEST = urllib.request.urlopen('https://www.worldweatheronline.com/budapest-weather/budapest/hu.aspx')
-    BAKU = urllib.request.urlopen('https://www.worldweatheronline.com/baku-weather/baki/az.aspx')
-    YEREVAN = urllib.request.urlopen('https://www.worldweatheronline.com/yerevan-weather/yerevan/am.aspx')
-    VIENNA = urllib.request.urlopen('https://www.worldweatheronline.com/vienna-weather/wien/at.aspx')
-    BUENOSAIRES = urllib.request.urlopen('https://www.worldweatheronline.com/buenos-aires-weather/distrito-federal/ar.aspx')
-    BRUSSELS = urllib.request.urlopen('https://www.worldweatheronline.com/brussels-weather/be.aspx')
-    BEIJING = urllib.request.urlopen('https://www.worldweatheronline.com/beijing-weather/beijing/cn.aspx')
-    LISBON = urllib.request.urlopen('https://www.worldweatheronline.com/lisbon-weather/lisboa/pt.aspx')
-    SYDNEY = urllib.request.urlopen('https://www.worldweatheronline.com/sydney-weather/new-south-wales/au.aspx')
-    RIYADH = urllib.request.urlopen('https://www.worldweatheronline.com/riyadh-weather/ar-riyad/sa.aspx')
-    ANKARA = urllib.request.urlopen('https://www.worldweatheronline.com/ankara-weather/ankara/tr.aspx')
-    TIRANE = urllib.request.urlopen('https://www.worldweatheronline.com/tirana-weather/tirane/al.aspx')
-    MINSK = urllib.request.urlopen('https://www.worldweatheronline.com/minsk-weather/minsk/by.aspx')
-    HELSINKI = urllib.request.urlopen('https://www.worldweatheronline.com/helsinki-weather/southern-finland/fi.aspx')
-    ATHENS = urllib.request.urlopen('https://www.worldweatheronline.com/athens-weather/attica/gr.aspx')
-    DUBLIN = urllib.request.urlopen('https://www.worldweatheronline.com/coultry-weather/dublin/ie.aspx')
-    BEIRUT = urllib.request.urlopen('https://www.worldweatheronline.com/beirut-weather/beyrouth/lb.aspx')
-    MONACO = urllib.request.urlopen('https://www.worldweatheronline.com/monaco-ville-weather/mc.aspx')
-    ISLAMABAD = urllib.request.urlopen('https://www.worldweatheronline.com/islamabad-weather/islamabad/pk.aspx')
-    SEOUL = urllib.request.urlopen('https://www.worldweatheronline.com/seoul-weather/kr.aspx')
+    MOSCOW = 'https://www.worldweatheronline.com/moscow-weather/moscow-city/ru.aspx'
+    OTTAWA = 'https://www.worldweatheronline.com/ottawa-weather/ontario/ca.aspx'
+    WASHIGNTON = 'https://www.worldweatheronline.com/washington-weather/district-of-columbia/us.aspx'
+    LONDON = 'https://www.worldweatheronline.com/london-weather/city-of-london-greater-london/gb.aspx'
+    KIEV = 'https://www.worldweatheronline.com/kiev-weather/kyyivska-oblast/ua.aspx'
+    ABUDHABI = 'https://www.worldweatheronline.com/abu-dhabi-weather/abu-dhabi/ae.aspx'
+    CAIRO = 'https://www.worldweatheronline.com/cairo-weather/al-qahirah/eg.aspx'
+    DAMASCUS = 'https://www.worldweatheronline.com/damascus-weather/dimashq/sy.aspx'
+    BERLIN = 'https://www.worldweatheronline.com/berlin-weather/berlin/de.aspx'
+    ROME = 'https://www.worldweatheronline.com/rome-weather/lazio/it.aspx'
+    BUDAPEST = 'https://www.worldweatheronline.com/budapest-weather/budapest/hu.aspx'
+    BAKU = 'https://www.worldweatheronline.com/baku-weather/baki/az.aspx'
+    YEREVAN = 'https://www.worldweatheronline.com/yerevan-weather/yerevan/am.aspx'
+    VIENNA = 'https://www.worldweatheronline.com/vienna-weather/wien/at.aspx'
+    BUENOSAIRES = 'https://www.worldweatheronline.com/buenos-aires-weather/distrito-federal/ar.aspx'
+    BRUSSELS = 'https://www.worldweatheronline.com/brussels-weather/be.aspx'
+    BEIJING = 'https://www.worldweatheronline.com/beijing-weather/beijing/cn.aspx'
+    LISBON = 'https://www.worldweatheronline.com/lisbon-weather/lisboa/pt.aspx'
+    SYDNEY = 'https://www.worldweatheronline.com/sydney-weather/new-south-wales/au.aspx'
+    RIYADH = 'https://www.worldweatheronline.com/riyadh-weather/ar-riyad/sa.aspx'
+    ANKARA = 'https://www.worldweatheronline.com/ankara-weather/ankara/tr.aspx'
+    TIRANE = 'https://www.worldweatheronline.com/tirana-weather/tirane/al.aspx'
+    MINSK = 'https://www.worldweatheronline.com/minsk-weather/minsk/by.aspx'
+    HELSINKI = 'https://www.worldweatheronline.com/helsinki-weather/southern-finland/fi.aspx'
+    ATHENS = 'https://www.worldweatheronline.com/athens-weather/attica/gr.aspx'
+    DUBLIN = 'https://www.worldweatheronline.com/coultry-weather/dublin/ie.aspx'
+    BEIRUT = 'https://www.worldweatheronline.com/beirut-weather/beyrouth/lb.aspx'
+    MONACO = 'https://www.worldweatheronline.com/monaco-ville-weather/mc.aspx'
+    ISLAMABAD = 'https://www.worldweatheronline.com/islamabad-weather/islamabad/pk.aspx'
+    SEOUL = 'https://www.worldweatheronline.com/seoul-weather/kr.aspx'
 
     the_city = {
         'Moscow': (MOSCOW),
@@ -179,7 +190,7 @@ def capitals(city, limit):
         output ='OoOps!, wrong input'
         return output
 
-    selected_city = the_city[city]
+    selected_city = urllib.request.urlopen(the_city[city])
     html = selected_city.read()
     html = html.decode('utf-8')
 
@@ -228,18 +239,102 @@ def capitals(city, limit):
     day13 = DATA[12][:9] + ",&nbsp;""&nbsp;High/Low:" + DATA[12][10:] + ",&nbsp;&nbsp;" + STATUS[12] + "&nbsp;&nbsp;" + "<br/><br/>"
     day14 = DATA[13][:9] + ",&nbsp;""&nbsp;High/Low:" + DATA[13][10:] + ",&nbsp;&nbsp;" + STATUS[13] + "&nbsp;&nbsp;" + "<br/><br/>"
 
+    Day1 = DATA[0][:9] + ", " + DATA[0][10:] + ", " + STATUS[0] + "|"
+    Day2 = DATA[1][:9] + ", " + DATA[1][10:] + ", " + STATUS[1] + "|"
+    Day3 = DATA[2][:9] + ", " + DATA[2][10:] + ", " + STATUS[2] + "|"
+    Day4 = DATA[3][:9] + ", " + DATA[3][10:] + ", " + STATUS[3] + "|"
+    Day5 = DATA[4][:9] + ", " + DATA[4][10:] + ", " + STATUS[4] + "|"
+    Day6 = DATA[5][:9] + ", " + DATA[5][10:] + ", " + STATUS[5] + "|"
+    Day7 = DATA[6][:9] + ", " + DATA[6][10:] + ", " + STATUS[6] + "|"
+    Day8 = DATA[7][:9] + ", " + DATA[7][10:] + ", " + STATUS[7] + "|"
+    Day9 = DATA[8][:9] + ", " + DATA[8][10:] + ", " + STATUS[8] + "|"
+    Day10 = DATA[9][:9] + ", " + DATA[9][10:] + ", " + STATUS[9] + "|"
+    Day11 = DATA[10][:9] + ", " + DATA[10][10:] + ", " + STATUS[10] + "|"
+    Day12 = DATA[11][:9] + ", " + DATA[11][10:] + ", " + STATUS[11] + "|"
+    Day13 = DATA[12][:9] + ", " + DATA[12][10:] + ", " + STATUS[12] + "|"
+    Day14 = DATA[13][:9] + ", " + DATA[13][10:] + ", " + STATUS[13] + "|"
+
+    period4 = DATA[0][:9] + "-" + DATA[3][:9]
+    period7 = DATA[0][:9] + "-" + DATA[6][:9]
+    period10 = DATA[0][:9] + "-" + DATA[9][:9]
+    period14 = DATA[0][:9] + "-" + DATA[13][:9]
+
+    con = sqlite3.connect("capitals.db")
+    con.row_factory = sqlite3.Row
+    cur = con.cursor()
+
+    total4 = Day1 + Day2 + Day3 + Day4
+    total7 = Day1 + Day2 + Day3 + Day4 + Day5 + Day6 + Day7
+    total10 = Day1 + Day2 + Day3 + Day4 + Day5 + Day6 + Day7 + Day8 + Day9 + Day10
+    total14 = Day1 + Day2 + Day3 + Day4 + Day5 + Day6 + Day7 + Day8 + Day9 + Day10 + Day11 + Day12 + Day13 + Day14
+
     if limit == "4 days":
-        output =  PLACE[0] + "<br/><br/>" + day1 + day2 + day3 + day4
-        return output
+
+        cur.execute('''SELECT City, period FROM data WHERE City=? AND period=? ''', (PLACE[0], period4))
+        exists = cur.fetchall()
+        if not exists:
+            output = PLACE[0] + "&nbsp;&nbsp;" + period4 + "<br/><br/>" + day1 + day2 + day3 + day4
+            cur_execute2("INSERT INTO data VALUES(?, ?, ?)", PLACE[0], period4, Day1 + Day2 + Day3 + Day4)
+            print("not exists")
+            return output
+        else:
+
+            cur.execute('''SELECT City, period, Days FROM data WHERE City=? AND period=? AND Days=?''', (PLACE[0], period4, total4))
+            exists1 = cur.fetchall()
+            for row in exists1:
+                # return tuple(row)
+                PLACE[0], period4, total4 = row
+                return "From your History..." + "<br/><br/>" +PLACE[0], period4 + "<br/><br/>" + total4
+
+
+
     if limit == "a week":
-        output = PLACE[0] + "<br/><br/>" + day1 + day2 + day3 + day4 + day5 + day6 + day7
-        return output
+        cur.execute('''SELECT City, period FROM data WHERE City=? AND period=?''', (PLACE[0], period7))
+        exists = cur.fetchall()
+        if not exists:
+            output = PLACE[0] + "&nbsp;&nbsp;" + period7 + "<br/><br/>" + day1 + day2 + day3 + day4 + day5 + day6 + day7
+            cur_execute2("INSERT INTO data VALUES(?, ?, ?)", PLACE[0], period7, Day1 + Day2 + Day3 + Day4 + Day5 + Day6 + Day7)
+            print("not exists")
+            return output
+        else:
+            cur.execute('''SELECT City, period, Days FROM data WHERE City=? AND period=? AND Days=?''', (PLACE[0], period7, total7))
+            exists1 = cur.fetchall()
+            for row in exists1:
+                # return tuple(row)
+                PLACE[0], period7, total7 = row
+                return "From your History..." + "<br/><br/>" + PLACE[0], period7 + "<br/><br/>" + total7
+
     if limit == "10 days":
-        output = PLACE[0] + "<br/><br/>" + day1 + day2 + day3 + day4 + day5 + day6 + day7 + day8 + day9 + day10
-        return output
+        cur.execute('''SELECT City, period FROM data WHERE City=? AND period=?''', (PLACE[0], period10))
+        exists = cur.fetchall()
+        if not exists:
+            output = PLACE[0] + "&nbsp;&nbsp;" + period10 + "<br/><br/>" + day1 + day2 + day3 + day4 + day5 + day6 + day7 + day8 + day9 + day10
+            cur_execute2("INSERT INTO data VALUES(?, ?, ?)", PLACE[0], period10, Day1 + Day2 + Day3 + Day4 + Day5 + Day6 + Day7 + Day8 + Day9 + Day10)
+            print("not exists")
+            return output
+        else:
+            cur.execute('''SELECT City, period, Days FROM data WHERE City=? AND period=? AND Days=?''', (PLACE[0], period10, total10))
+            exists1 = cur.fetchall()
+            for row in exists1:
+                # return tuple(row)
+                PLACE[0], period10, total10 = row
+                return "From your History..." + "<br/><br/>" + PLACE[0], period10 + "<br/><br/>" + total10
+
     if limit == "2 weeks":
-        output = PLACE[0] + "<br/><br/>" + day1 + day2 + day3 + day4 + day5 + day6 + day7 + day8 + day9 + day10 + day11 + day12 + day13 + day14
-        return output
+        cur.execute('''SELECT City, period FROM data WHERE City=? AND period=?''', (PLACE[0], period14))
+        exists = cur.fetchall()
+        if not exists:
+            output = PLACE[0] + "&nbsp;&nbsp;" + period14 + "<br/><br/>" + day1 + day2 + day3 + day4 + day5 + day6 + day7 + day8 + day9 + day10 + day11 + day12 + day13 + day14
+            cur_execute2("INSERT INTO data VALUES(?, ?, ?)", PLACE[0], period14, Day1 + Day2 + Day3 + Day4 + Day5 + Day6 + Day7 + Day8 + Day9 + Day10 + Day11 + Day12 + Day13 + Day14)
+            print("not exists")
+            return output
+        else:
+            cur.execute('''SELECT City, period, Days FROM data WHERE City=? AND period=? AND Days=?''',(PLACE[0], period14, total14))
+            exists1 = cur.fetchall()
+            for row in exists1:
+                # return tuple(row)
+                PLACE[0], period14, total14 = row
+                return "From your History..." + "<br/><br/>" + PLACE[0], period14 + "<br/><br/>" + total14
 
 @app.route('/')
 def home():
@@ -283,6 +378,18 @@ def database():
 
     rows = cur.fetchall();
     return render_template("database.html", rows=rows)
-#
+
+
+@app.route('/database2')
+def database2():
+    con = sqlite3.connect("capitals.db")
+    con.row_factory = sqlite3.Row
+
+    cur = con.cursor()
+    cur.execute("SELECT data.City, data.period, data.Days FROM data")
+
+    rows = cur.fetchall();
+    return render_template("database2.html", rows=rows)
+
 if __name__ == '__main__':
     app.run(debug=True)
